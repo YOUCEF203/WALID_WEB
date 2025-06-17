@@ -57,12 +57,8 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         
-        body.light-mode {
-             background-image: none;
-        }
-        body:not(.light-mode) {
-             background-image: radial-gradient(circle at 50% 0, rgba(var(--primary-glow-rgb), 0.05), transparent 40%);
-        }
+        body.light-mode { background-image: none; }
+        body:not(.light-mode) { background-image: radial-gradient(circle at 50% 0, rgba(var(--primary-glow-rgb), 0.05), transparent 40%); }
 
         .font-pixel { font-family: 'Press Start 2P', cursive; }
 
@@ -82,12 +78,8 @@
             color: var(--text-primary);
             transition: transform 0.4s ease-out;
         }
-        .light-mode .hero-title {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        .dark-mode .hero-title {
-            animation: pulse-glow 4s infinite ease-in-out;
-        }
+        .light-mode .hero-title { text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .dark-mode .hero-title { animation: pulse-glow 4s infinite ease-in-out; }
         
         .hero-logo { transition: transform 0.4s ease-out; }
 
@@ -176,9 +168,25 @@
             transition: all 0.4s ease-in-out;
         }
         
+        .featured-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            border: 2px solid transparent;
+            box-shadow: 0 0 0 0 rgba(var(--primary-glow-rgb), 0.5);
+            transition: all 0.4s ease;
+            pointer-events: none;
+        }
+        
         .featured-card:hover {
              transform: translateY(-10px);
              box-shadow: 0 20px 50px var(--shadow-color), 0 0 40px rgba(var(--primary-glow-rgb), 0.25);
+        }
+        
+        .featured-card:hover::after {
+            box-shadow: 0 0 60px 10px rgba(var(--primary-glow-rgb), 0.3);
+            border-color: rgba(var(--primary-glow-rgb), 0.5);
         }
         
         .featured-thumbnail {
@@ -220,7 +228,7 @@
             flex-direction: column;
             justify-content: center;
         }
-        
+
         .stats-icon {
             color: var(--icon-color);
         }
@@ -243,9 +251,21 @@
             border-color: var(--primary-glow);
             box-shadow: 0 0 10px rgba(var(--primary-glow-rgb), 0.3);
         }
+        
+        .social-icon {
+            transition: transform 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: scale(1.15) rotate(-5deg);
+        }
+
     </style>
 </head>
 <body class="dark-mode">
+    
+    <!-- Audio player for hover sound -->
+    <audio id="hover-audio" src="hover.mp3" preload="auto"></audio>
+
     <!-- Header -->
     <header class="header-nav fixed top-0 left-0 right-0 z-50">
         <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
@@ -373,11 +393,11 @@
             <h2 class="font-pixel text-2xl sm:text-3xl text-white scroll-fade-in">انضم إلى مجتمعنا!</h2>
             <p class="text-lg text-gray-300 my-4 max-w-xl mx-auto scroll-fade-in" style="transition-delay: 150ms;">تابعني على مختلف المنصات وكن جزءاً من المغامرة المستمرة.</p>
             <div class="flex justify-center space-x-reverse space-x-6 my-8 scroll-fade-in" style="transition-delay: 250ms;">
-                <a href="https://www.youtube.com/channel/UC7oIe0b_iUsRDCM1xzPDD9g" target="_blank" class="text-gray-400 hover:text-red-600 transform hover:scale-110 transition-all" aria-label="YouTube"><svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.254,4,12,4,12,4S5.746,4,4.186,4.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.746,2,12,2,12s0,4.254,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.746,20,12,20,12,20s6.254,0,7.814-0.418c0.861-0.23,1.538-0.908,1.768-1.768C22,16.254,22,12,22,12S22,7.746,21.582,6.186z M10,15.464V8.536L16,12L10,15.464z"/></svg></a>
-                <a href="https://instagram.com/walidwb3" target="_blank" class="text-gray-400 hover:text-orange-500 transform hover:scale-110 transition-all" aria-label="Instagram">
+                <a href="https://www.youtube.com/channel/UC7oIe0b_iUsRDCM1xzPDD9g" target="_blank" class="text-gray-400 hover:text-red-600 social-icon" aria-label="YouTube"><svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.254,4,12,4,12,4S5.746,4,4.186,4.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.746,2,12,2,12s0,4.254,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.746,20,12,20,12,20s6.254,0,7.814-0.418c0.861-0.23,1.538-0.908,1.768-1.768C22,16.254,22,12,22,12S22,7.746,21.582,6.186z M10,15.464V8.536L16,12L10,15.464z"/></svg></a>
+                <a href="https://instagram.com/walidwb3" target="_blank" class="text-gray-400 hover:text-orange-500 social-icon" aria-label="Instagram">
                     <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.44c-3.116 0-3.483.011-4.71.068-2.766.126-3.953 1.31-4.08 4.08-.056 1.226-.067 1.582-.067 4.71s.011 3.483.067 4.71c.127 2.766 1.314 3.953 4.08 4.08 1.227.056 1.594.067 4.71.067s3.483-.011 4.71-.067c2.766-.127 3.953-1.314 4.08-4.08.056-1.227.067-1.594.067-4.71s-.011-3.483-.067-4.71c-.127-2.766-1.314-3.953-4.08-4.08-1.226-.057-1.582-.068-4.71-.068zm0 5.48c-1.928 0-3.482 1.554-3.482 3.48s1.554 3.482 3.482 3.482 3.482-1.554 3.482-3.482S13.928 9.083 12 9.083zm0 5.6c-1.168 0-2.118-.95-2.118-2.118s.95-2.118 2.118-2.118 2.118.95 2.118 2.118-.95 2.118-2.118 2.118zm4.465-6.525c0 .605-.49.995-1.095.995s-1.095-.39-1.095-1.095.49-.995 1.095-.995 1.095.39 1.095 1.095z"/></svg>
                 </a>
-                <a href="https://discord.gg/5qeAsbBkts" target="_blank" class="text-gray-400 hover:text-red-400 transform hover:scale-110 transition-all" aria-label="Discord">
+                <a href="https://discord.gg/5qeAsbBkts" target="_blank" class="text-gray-400 hover:text-red-400 social-icon" aria-label="Discord">
                    <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.431c-1.42-.79-3.033-1.23-4.75-1.42a.417.417 0 00-.414.417c.01.218.04.437.09.655a13.342 13.342 0 00-9.486 0c.05-.218.08-.437.09-.655a.417.417 0 00-.415-.417c-1.717.19-3.33.63-4.75 1.42a.417.417 0 00-.214.387c.099 1.635.83 5.463 2.228 9.535a.417.417 0 00.4.316c1.64.63 3.337 1.045 5.016 1.258a.417.417 0 00.413-.417c-.03-.237-.06-.475-.079-.713a11.12 11.12 0 006.316 0c-.02.238-.05.476-.08.713a.417.417 0 00.414.417c1.68-.213 3.375-.628 5.015-1.258a.417.417 0 00.402-.316c1.397-4.072 2.128-7.9 2.227-9.535a.417.417 0 00-.214-.387zM8.02 12.33c-.914 0-1.656-.884-1.656-1.97s.742-1.97 1.656-1.97c.915 0 1.656.883 1.656 1.97s-.74 1.97-1.656 1.97zm7.96 0c-.915 0-1.656-.884-1.656-1.97s.74-1.97 1.656-1.97c.914 0 1.656.883 1.656 1.97s-.742 1.97-1.656 1.97z"/></svg>
                 </a>
             </div>
@@ -391,6 +411,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Custom Hover Sound ---
+            const hoverAudio = document.getElementById('hover-audio');
+            function playHoverSound() {
+                if (hoverAudio) {
+                    hoverAudio.currentTime = 0;
+                    hoverAudio.play().catch(error => console.log("Audio play was prevented by browser.", error));
+                }
+            }
+            const interactiveElements = document.querySelectorAll('a, button');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', playHoverSound);
+            });
+
             // --- Theme Toggler ---
             const themeToggleBtn = document.getElementById('theme-toggle-btn');
             const sunIcon = document.getElementById('theme-icon-sun');
@@ -409,18 +442,14 @@
                     moonIcon.classList.remove('hidden');
                 }
             };
-
             themeToggleBtn.addEventListener('click', () => {
                 const isLight = document.body.classList.contains('light-mode');
                 const newTheme = isLight ? 'dark' : 'light';
                 localStorage.setItem('theme', newTheme);
                 applyTheme(newTheme);
             });
-
-            // Apply saved theme on page load
-            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             applyTheme(savedTheme);
-
 
             // --- YouTube API ---
             document.getElementById('year').textContent = new Date().getFullYear();

@@ -258,7 +258,6 @@
         .social-icon:hover {
             transform: scale(1.15) rotate(-5deg);
         }
-
     </style>
 </head>
 <body class="dark-mode">
@@ -416,7 +415,7 @@
             function playHoverSound() {
                 if (hoverAudio) {
                     hoverAudio.currentTime = 0;
-                    hoverAudio.play().catch(error => console.log("Audio play was prevented by browser.", error));
+                    hoverAudio.play().catch(error => {});
                 }
             }
             const interactiveElements = document.querySelectorAll('a, button');

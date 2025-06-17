@@ -18,37 +18,61 @@
     
     <style>
         :root {
-            --primary-glow: #d15609; /* Fiery Red */
-            --secondary-glow: #b34a08; /* Darker Fiery Red */
+            /* Dark Theme (Default) */
+            --primary-glow: #d15609;
+            --secondary-glow: #b34a08;
             --primary-glow-rgb: 209, 86, 9;
-            --background-dark: #00081e; /* Deep Blue */
-            --background-light: #01123a;
+            --bg-main: #00081e;
+            --bg-secondary: #01123a;
+            --bg-header: rgba(0, 8, 30, 0.7);
+            --bg-card: #01123a;
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --border-color: rgba(var(--primary-glow-rgb), 0.2);
+            --shadow-color: rgba(0,0,0,0.4);
+            --icon-color: #b34a08;
         }
 
+        .light-mode {
+            /* Light Theme */
+            --primary-glow: #d15609;
+            --secondary-glow: #b34a08;
+            --primary-glow-rgb: 209, 86, 9;
+            --bg-main: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --bg-header: rgba(255, 255, 255, 0.7);
+            --bg-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --border-color: rgba(var(--primary-glow-rgb), 0.2);
+            --shadow-color: rgba(0,0,0,0.1);
+            --icon-color: #b34a08;
+        }
+        
         body {
-            background-color: var(--background-dark);
-            background-image: radial-gradient(circle at 50% 0, rgba(var(--primary-glow-rgb), 0.05), transparent 40%);
-            color: #e5e7eb;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             font-family: 'Tajawal', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .font-pixel { font-family: 'Press Start 2P', cursive; }
 
         .header-nav {
-            background-color: rgba(0, 8, 30, 0.7);
+            background-color: var(--bg-header);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(var(--primary-glow-rgb), 0.2);
+            border-bottom: 1px solid var(--border-color);
         }
         
         .nav-link {
             font-family: 'Tajawal', sans-serif;
             font-weight: 700;
-            color: #cbd5e1;
+            color: var(--text-secondary);
             transition: color 0.3s ease, text-shadow 0.3s ease;
         }
         .nav-link:hover {
-            color: white;
+            color: var(--text-primary);
             text-shadow: 0 0 8px rgba(var(--primary-glow-rgb), 0.6);
         }
 
@@ -82,24 +106,25 @@
         }
         
         .neon-btn:disabled {
-            background: #4b5563; /* Gray */
+            background: #4b5563;
             box-shadow: none;
             cursor: not-allowed;
             transform: none;
         }
 
         .video-card {
-            background-color: var(--background-light);
-            border: 1px solid rgba(var(--primary-glow-rgb), 0.1);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 5px 15px var(--shadow-color);
         }
         .video-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0, 0.4), 0 0 20px rgba(var(--primary-glow-rgb), 0.15);
+            box-shadow: 0 10px 30px var(--shadow-color), 0 0 20px rgba(var(--primary-glow-rgb), 0.15);
         }
         .video-card-title {
             display: -webkit-box;
@@ -107,35 +132,63 @@
             -webkit-box-orient: vertical;  
             overflow: hidden;
             text-overflow: ellipsis;
-            min-height: 3rem; /* Ensures consistent height for 2 lines */
+            min-height: 3rem;
             flex-grow: 1;
+            color: var(--text-primary);
         }
         
+        #theme-toggle-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        #theme-toggle-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 10px rgba(var(--primary-glow-rgb), 0.3);
+        }
+
         .loader-path {
             fill: var(--primary-glow);
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="dark-mode">
+    
+    <!-- Audio player for hover sound -->
+    <audio id="hover-audio" src="hover.mp3" preload="auto"></audio>
+    
     <!-- Header -->
     <header class="header-nav sticky top-0 left-0 right-0 z-50">
         <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="flex items-center gap-3 sm:gap-4">
                 <img src="https://yt3.googleusercontent.com/-Qg68OB5bWybkXUwX_X6RnHN20uLPu3oBpaqJsWCGQB5Bb6iGk3pQtHmoImmh54dh-H166XG=s160-c-k-c0x00ffffff-no-rj" alt="Alpha Walid Logo" class="h-10 w-10 rounded-full">
-                <span class="font-pixel text-base sm:text-lg text-white">Alpha walid</span>
+                <span class="font-pixel text-base sm:text-lg text-primary">Alpha walid</span>
             </a>
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-4">
                 <a href="index.html" class="nav-link text-sm hidden sm:block">الرئيسية</a>
                 <a href="https://www.youtube.com/channel/UC7oIe0b_iUsRDCM1xzPDD9g" target="_blank" class="neon-btn text-xs" style="padding: 0.6rem 1.2rem; letter-spacing: 1px;">
                     يوتيوب
                 </a>
+                 <button id="theme-toggle-btn" aria-label="Toggle Dark Mode">
+                    <svg id="theme-icon-sun" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="theme-icon-moon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
             </div>
         </nav>
     </header>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 sm:px-6 py-12 sm:py-20">
-        <h1 class="font-pixel text-4xl sm:text-5xl text-center text-white mb-12">
+        <h1 class="font-pixel text-4xl sm:text-5xl text-center text-primary mb-12">
             <span class="gradient-text">فيديوهات القناة</span>
         </h1>
 
@@ -146,7 +199,7 @@
 
         <!-- Loading Spinner -->
         <div id="loader" class="text-center py-10 hidden">
-            <svg class="animate-spin h-8 w-8 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg class="animate-spin h-8 w-8 text-primary mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75 loader-path" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -167,17 +220,56 @@
 
     <!-- Footer -->
     <footer class="bg-black py-16 border-t border-gray-900 mt-20">
-        <div class="container mx-auto px-4 text-center text-gray-400">
-            <p class="text-xs text-gray-500 leading-relaxed">
+        <div class="container mx-auto px-4 text-center text-secondary">
+            <p class="text-xs leading-relaxed">
                 © <span id="year">2024</span> | Alpha Walid. كل الحقوق محفوظة.
                 <br>
-                تم التطوير من طرف <a href="https://www.facebook.com/youcef.youcef.209664/?locale=ar_AR" target="_blank" class="font-bold text-gray-400 hover:text-white transition-colors">Youcef Studio</a>
+                تم التطوير من طرف <a href="https://www.facebook.com/youcef.youcef.209664/?locale=ar_AR" target="_blank" class="font-bold text-secondary hover:text-primary transition-colors">Youcef Studio</a>
             </p>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Custom Hover Sound ---
+            const hoverAudio = document.getElementById('hover-audio');
+            function playHoverSound() {
+                if (hoverAudio) {
+                    hoverAudio.currentTime = 0;
+                    hoverAudio.play().catch(error => console.log("Audio play was prevented by browser.", error));
+                }
+            }
+
+             // --- Theme Toggler ---
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const sunIcon = document.getElementById('theme-icon-sun');
+            const moonIcon = document.getElementById('theme-icon-moon');
+            
+            const applyTheme = (theme) => {
+                if (theme === 'light') {
+                    document.body.classList.add('light-mode');
+                    document.body.classList.remove('dark-mode');
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                } else {
+                    document.body.classList.remove('light-mode');
+                    document.body.classList.add('dark-mode');
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                }
+            };
+
+            themeToggleBtn.addEventListener('click', () => {
+                playHoverSound();
+                const isLight = document.body.classList.contains('light-mode');
+                const newTheme = isLight ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            });
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            applyTheme(savedTheme);
+
+            // --- YouTube API ---
             document.getElementById('year').textContent = new Date().getFullYear();
             const apiKey = 'AIzaSyBLn6tLadevJS759WHdbHdjPwFS7uN7cb4'; 
             const channelId = 'UC7oIe0b_iUsRDCM1xzPDD9g';
@@ -219,7 +311,6 @@
                 videos.forEach(video => {
                     const videoId = video.id.videoId;
                     const snippet = video.snippet;
-                    // Use a higher quality thumbnail if available
                     const thumbnailUrl = snippet.thumbnails.high.url;
                     const title = snippet.title;
                     const card = `
@@ -231,17 +322,28 @@
                                 </div>
                             </div>
                             <div class="p-4 flex flex-col">
-                                <h3 class="video-card-title text-white font-bold text-md leading-tight">${title}</h3>
+                                <h3 class="video-card-title font-bold text-md leading-tight">${title}</h3>
                             </div>
                         </a>
                     `;
                     videoGrid.innerHTML += card;
                 });
+                const newCards = videoGrid.querySelectorAll('.video-card:not(.sound-attached)');
+                newCards.forEach(card => {
+                    card.classList.add('sound-attached');
+                    card.addEventListener('mouseenter', playHoverSound);
+                });
             }
+
             loadMoreBtn.addEventListener('click', () => {
                 if (nextPageToken) fetchVideos(nextPageToken);
             });
             fetchVideos();
+
+            const navLinks = document.querySelectorAll('.nav-link, .neon-btn');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', playHoverSound);
+            })
         });
     </script>
 </body>

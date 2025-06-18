@@ -37,7 +37,6 @@
             /* Light Theme */
             --primary-glow: #d15609;
             --secondary-glow: #b34a08;
-            --primary-glow-rgb: 209, 86, 9;
             --bg-main: #f0f2f5;
             --bg-secondary: #ffffff;
             --bg-header: rgba(255, 255, 255, 0.7);
@@ -49,9 +48,7 @@
             --icon-color: #b34a08;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg-main);
@@ -263,7 +260,6 @@
             transform: scale(1.15) rotate(-5deg);
         }
         
-        /* Back to Top Button */
         #back-to-top-btn {
             position: fixed;
             bottom: 20px;
@@ -294,12 +290,20 @@
             transform: scale(1.1);
         }
 
+        /* Typing Effect Styles */
+        .typing-cursor {
+            animation: blink 1s step-end infinite;
+            color: var(--primary-glow);
+            margin-right: 2px;
+        }
+
+        @keyframes blink {
+            from, to { color: transparent }
+            50% { color: var(--primary-glow); }
+        }
     </style>
 </head>
 <body class="dark-mode">
-    
-    <!-- Audio player for hover sound -->
-    <audio id="hover-audio" src="hover.mp3" preload="auto"></audio>
 
     <!-- Header -->
     <header class="header-nav fixed top-0 left-0 right-0 z-50">
@@ -310,9 +314,6 @@
             </a>
             <div class="flex items-center gap-4">
                 <a href="VIDEOS.html" class="nav-link text-sm hidden sm:block">الفيديوهات</a>
-                <a href="https://www.youtube.com/channel/UC7oIe0b_iUsRDCM1xzPDD9g" target="_blank" class="neon-btn text-xs" style="padding: 0.6rem 1.2rem; letter-spacing: 1px;">
-                    يوتيوب
-                </a>
                 <button id="theme-toggle-btn" aria-label="Toggle Dark Mode">
                     <svg id="theme-icon-sun" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     <svg id="theme-icon-moon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
@@ -329,8 +330,8 @@
             <div class="relative z-10 flex flex-col items-center">
                 <img src="https://yt3.googleusercontent.com/-Qg68OB5bWybkXUwX_X6RnHN20uLPu3oBpaqJsWCGQB5Bb6iGk3pQtHmoImmh54dh-H166XG=s160-c-k-c0x00ffffff-no-rj" alt="Alpha Walid Logo" class="h-28 w-28 sm:h-32 sm:w-32 rounded-full mb-8 border-4 border-gray-700 shadow-lg hero-logo">
                 <h1 class="font-pixel text-4xl sm:text-5xl md:text-7xl hero-title">Alpha walid</h1>
-                <p class="mt-6 text-lg sm:text-xl md:text-2xl text-secondary max-w-2xl mx-auto font-bold">
-                   أهلاً بك في عالمي، حيث كل لعبة هي مغامرة جديدة!
+                <p class="mt-6 text-lg sm:text-xl md:text-2xl text-secondary max-w-2xl mx-auto font-bold h-16 sm:h-auto">
+                    <span id="typing-effect"></span><span class="typing-cursor">|</span>
                 </p>
                 <div class="mt-12">
                     <a href="#cta" class="neon-btn text-xs sm:text-sm">
@@ -454,19 +455,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Custom Hover Sound ---
-            const hoverAudio = document.getElementById('hover-audio');
-            function playHoverSound() {
-                if (hoverAudio) {
-                    hoverAudio.currentTime = 0;
-                    hoverAudio.play().catch(error => {});
-                }
-            }
-            const interactiveElements = document.querySelectorAll('a, button');
-            interactiveElements.forEach(el => {
-                el.addEventListener('mouseenter', playHoverSound);
-            });
-
             // --- Theme Toggler ---
             const themeToggleBtn = document.getElementById('theme-toggle-btn');
             const sunIcon = document.getElementById('theme-icon-sun');
@@ -493,6 +481,37 @@
             });
             const savedTheme = localStorage.getItem('theme') || 'dark';
             applyTheme(savedTheme);
+
+            // --- Typing Effect ---
+            const typingElement = document.getElementById('typing-effect');
+            const phrase = "أهلاً بك في عالمي، حيث كل لعبة هي مغامرة جديدة!";
+            let charIndex = 0;
+            let isDeleting = false;
+
+            function typeLoop() {
+                if (isDeleting) {
+                    // Deleting
+                    if (charIndex > 0) {
+                        typingElement.textContent = phrase.substring(0, charIndex - 1);
+                        charIndex--;
+                        setTimeout(typeLoop, 50);
+                    } else {
+                        isDeleting = false;
+                        setTimeout(typeLoop, 500);
+                    }
+                } else {
+                    // Typing
+                    if (charIndex < phrase.length) {
+                        typingElement.textContent = phrase.substring(0, charIndex + 1);
+                        charIndex++;
+                        setTimeout(typeLoop, 120);
+                    } else {
+                        isDeleting = true;
+                        setTimeout(typeLoop, 3000); // Pause before deleting
+                    }
+                }
+            }
+            if(typingElement) typeLoop();
 
             // --- Back to Top Button ---
             const backToTopBtn = document.getElementById('back-to-top-btn');

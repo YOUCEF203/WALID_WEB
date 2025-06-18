@@ -198,6 +198,9 @@
 </head>
 <body class="dark-mode">
     
+    <!-- Audio player for hover sound -->
+    <audio id="hover-audio" src="hover.mp3" preload="auto"></audio>
+    
     <!-- Header -->
     <header class="header-nav sticky top-0 left-0 right-0 z-50">
         <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
@@ -270,6 +273,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+             // --- Custom Hover Sound ---
+            const hoverAudio = document.getElementById('hover-audio');
+            function playHoverSound() {
+                if (hoverAudio) {
+                    hoverAudio.currentTime = 0;
+                    hoverAudio.play().catch(error => {});
+                }
+            }
+
              // --- Theme Toggler ---
             const themeToggleBtn = document.getElementById('theme-toggle-btn');
             const sunIcon = document.getElementById('theme-icon-sun');
@@ -290,6 +302,7 @@
             };
 
             themeToggleBtn.addEventListener('click', () => {
+                playHoverSound();
                 const isLight = document.body.classList.contains('light-mode');
                 const newTheme = isLight ? 'dark' : 'light';
                 localStorage.setItem('theme', newTheme);
@@ -310,6 +323,7 @@
             backToTopBtn.addEventListener('click', () => {
                 window.scrollTo(0, 0);
             });
+
 
             // --- YouTube API ---
             document.getElementById('year').textContent = new Date().getFullYear();
@@ -370,11 +384,23 @@
                     `;
                     videoGrid.innerHTML += card;
                 });
+                // Attach sound to new cards
+                const newCards = videoGrid.querySelectorAll('.video-card:not(.sound-attached)');
+                newCards.forEach(card => {
+                    card.classList.add('sound-attached');
+                    card.addEventListener('mouseenter', playHoverSound);
+                });
             }
             loadMoreBtn.addEventListener('click', () => {
                 if (nextPageToken) fetchVideos(nextPageToken);
             });
             fetchVideos();
+
+            // Attach sound to initial static buttons
+            const navLinks = document.querySelectorAll('.nav-link, .neon-btn, #load-more-btn, #back-to-top-btn');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', playHoverSound);
+            })
 
         });
     </script>

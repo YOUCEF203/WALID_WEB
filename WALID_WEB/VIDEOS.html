@@ -49,6 +49,10 @@
             --icon-color: #b34a08;
         }
         
+        html {
+            scroll-behavior: smooth;
+        }
+        
         body {
             background-color: var(--bg-main);
             color: var(--text-primary);
@@ -159,12 +163,40 @@
         .loader-path {
             fill: var(--primary-glow);
         }
+        
+        #back-to-top-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-glow);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+            z-index: 1000;
+        }
+        #back-to-top-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #back-to-top-btn:hover {
+            background: var(--secondary-glow);
+            transform: scale(1.1);
+        }
+
     </style>
 </head>
 <body class="dark-mode">
-    
-    <!-- Audio player for hover sound -->
-    <audio id="hover-audio" src="hover.mp3" preload="auto"></audio>
     
     <!-- Header -->
     <header class="header-nav sticky top-0 left-0 right-0 z-50">
@@ -228,18 +260,16 @@
             </p>
         </div>
     </footer>
+    
+    <!-- Back to Top Button -->
+    <button id="back-to-top-btn" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Custom Hover Sound ---
-            const hoverAudio = document.getElementById('hover-audio');
-            function playHoverSound() {
-                if (hoverAudio) {
-                    hoverAudio.currentTime = 0;
-                    hoverAudio.play().catch(error => console.log("Audio play was prevented by browser.", error));
-                }
-            }
-
              // --- Theme Toggler ---
             const themeToggleBtn = document.getElementById('theme-toggle-btn');
             const sunIcon = document.getElementById('theme-icon-sun');
@@ -260,7 +290,6 @@
             };
 
             themeToggleBtn.addEventListener('click', () => {
-                playHoverSound();
                 const isLight = document.body.classList.contains('light-mode');
                 const newTheme = isLight ? 'dark' : 'light';
                 localStorage.setItem('theme', newTheme);
@@ -268,6 +297,19 @@
             });
             const savedTheme = localStorage.getItem('theme') || 'dark';
             applyTheme(savedTheme);
+
+            // --- Back to Top Button ---
+            const backToTopBtn = document.getElementById('back-to-top-btn');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo(0, 0);
+            });
 
             // --- YouTube API ---
             document.getElementById('year').textContent = new Date().getFullYear();
@@ -328,22 +370,12 @@
                     `;
                     videoGrid.innerHTML += card;
                 });
-                const newCards = videoGrid.querySelectorAll('.video-card:not(.sound-attached)');
-                newCards.forEach(card => {
-                    card.classList.add('sound-attached');
-                    card.addEventListener('mouseenter', playHoverSound);
-                });
             }
-
             loadMoreBtn.addEventListener('click', () => {
                 if (nextPageToken) fetchVideos(nextPageToken);
             });
             fetchVideos();
 
-            const navLinks = document.querySelectorAll('.nav-link, .neon-btn');
-            navLinks.forEach(link => {
-                link.addEventListener('mouseenter', playHoverSound);
-            })
         });
     </script>
 </body>
